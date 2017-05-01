@@ -10,6 +10,7 @@ first_published: 2017
 email: jhaddadin@gmail.com
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://yourdomain.com" # the base hostname & protocol for your site
+repository: trashcity/jhaddadin.github.io
 social:
   twitter: https://twitter.com/JimHaddadin
   github: https://github.com/jhaddadin
