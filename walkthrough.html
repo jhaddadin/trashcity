@@ -3,9 +3,12 @@ layout: walkthrough
 title: How was this made?
 ---
 	<h3>Crunching the numbers</h3>
-	<p>The decision of which violations to include was somewhat arbitrary. I tried to isolate violations that had the greatest likelihood of being tied to trash stored on residential properties. That meant excluding violation for improper storage of trash on commercial properties, violations involving construction sites, etc. The data I used for 2016 includes variations of the following categories:</p>
+	<p>I explored the code enforcement violations, 311 service requests and crime reports using Python, pandas and jupyter notebooks. You can see the <a href="https://github.com/jhaddadin/trashcity/tree/master/notebooks">specific methods here</a>.</p>
+	<p>The decision of which violations and 311 complaints to include in my analysis was somewhat arbitrary. I focused on categories that correspond with trash stored on residential properties. In the case of code enforcement violations, that meant excluding several types of violations, such as improper storage of trash on commercial properties, violations involving construction sites, etc. I chose to include the following categories:</p>
+	<h4>Code Enforcement violations</h4>
 	<p><ul>
-	<li>'Improper storage trash: res', 'Illegal dumping < 1 cubic yd'</li>
+	<li>'Improper storage trash: res',</li>
+	<li>'Illegal dumping < 1 cubic yd'</li>
        <li>'Trash illegally dump container',</li>
        <li>'Maint. of Areas Free from Garbage & Rubbish(Common Areas) - In any dwelling, the owner shall be responsible for maintaining in a clean and sanitary condition free of garbage, rubbish, filth all common areas.',
        <li>'Illegal dumping 1-5 cubic yd.:',</li>
@@ -18,9 +21,8 @@ title: How was this made?
        <li>'Storage of Garbage & Rubbish - The occupants of each dwelling, dwelling unit, and rooming unit shall be responsible for the proper placement of his garbage and rubbish in the receptacles required in 105 CMR 410.600C</li>
 	</ul></p>
 	<h4>311 complaints</h4>
-	<p>This is explainer text.</p>
 	<p><ul>
-	<li>'Overflowing or Un-kept Dumpster'<li>
+	<li>'Overflowing or Un-kept Dumpster'</li>
     <li>'Improper Storage of Trash (Barrels)'</li>
     <li>'Missed Trash/Recycling/Yard Waste/Bulk Item'</li>
     <li>'Trash on Vacant Lot'</li>
@@ -28,5 +30,15 @@ title: How was this made?
 	</ul></p>
 	<hr />
 	<h4>Making the map</h4>
-	<p>Nam sapien ante, varius in pulvinar vitae, rhoncus id massa. Donec varius ex in mauris ornare, eget euismod urna egestas. Etiam lacinia tempor ipsum, sodales porttitor justo. Aliquam dolor quam, semper in tortor eu, volutpat efficitur quam. Fusce nec fermentum nisl. Aenean erat diam, tempus aliquet erat.</p>
-	<p>Etiam iaculis nulla ipsum, et pharetra libero rhoncus ut. Phasellus rutrum cursus velit, eget condimentum nunc blandit vel. In at pulvinar lectus. Morbi diam ante, vulputate et imperdiet eget, fermentum non dolor. Ut eleifend sagittis tincidunt. Sed viverra commodo mi, ac rhoncus justo. Duis neque ligula, elementum ut enim vel, posuere finibus justo. Vivamus facilisis maximus nibh quis pulvinar. Quisque hendrerit in ipsum id tellus facilisis fermentum. Proin mauris dui, at vestibulum sit amet, auctor bibendum neque.</p>
+	<p>Spatial analysis was accomplished with QGIS. First, I added the csv file containing the list of violations recorded during moving week. Layer -> Add layer -> Add Delimited Text Layer. Select WGS 84 (EPSG:4326) as the CRS.<p>
+	<p><img src="images/qgis1.png" width="100%"></p>
+	<p>Next, add the ESRI shapefile containing all parcels in the city. From the file browser, click and drag the file onto the map.</p>
+	<p><img src="images/qgis2.png" width="100%"></p>
+	<p>Finally, perform a point in polygon count to calculate the number of violations that were recorded in each parcel. Save the output to a new shapefile. Vector -> Analysis Tools -> Points in Polygon.
+	<p><img src="images/qgis3.png" width="100%"></p>
+	<p>I used Carto to create an interactive map. It features three layers: An ESRI shapefile showing the outline of Boston; the new shapefile created in QGIS showing the number of violations in each parcel; and a CSV file of 311 complaints submitted during moving week.<p>
+	<p>First, to produce an outline of the shape of the city, I imported the Boston boundary shapefile as a new dataset. I reduced the opacity close to 0.0 so it wouldn't stand out too much.</p>
+	<p>To map the parcels, I uploaded the new shapefile created in QGIS, which includes a "pntcnt" column. It indicates the number of violations recorded in each parcel. In the wizards tab, I selected category visualization. Then in the CartoCSS tab, I applied a few simple rules to style the parcels. Rather than using multiple colors, I decided to color every parcel red if the number of violations was greater than 0. All other parcels are hidden (polygon-opacity: 0).
+	<p><img src="images/carto1.png" width="100%"></p>
+	<p>Finally, I added a new layer of 311 complaints. In the wizards tab, I selected simple visualization. I added some additional styling in the CartoCSS tab to change the size and opacity of the points at different zoom levels. The code below displays the photograph submitted with each 311 complaint inside the infowindow. The URL for each photo is saved inside a column called "submittedphoto".</p>
+	<p><img src="images/carto2.png" width="100%"></p>
