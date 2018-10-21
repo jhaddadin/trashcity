@@ -8,7 +8,7 @@ description: |
 site.owner: Jim Haddadin
 first_published: 2017
 email: jhaddadin@gmail.com
-baseurl: "" # the subpath of your site, e.g. /blog
+baseurl: "/trashcity" # the subpath of your site, e.g. /blog
 url: "http://yourdomain.com" # the base hostname & protocol for your site
 repository: trashcity/jhaddadin.github.io
 social:
